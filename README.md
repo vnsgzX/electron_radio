@@ -26,5 +26,5 @@ npm install
 Start the application:
 npm start
 
-📝 License
+📝 License:
 This project is open source.
