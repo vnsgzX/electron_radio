@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electron Radio</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 30px; 
+            background: #121212; 
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { margin-bottom: 20px; font-weight: 300; letter-spacing: 1px; }
+        
+        .container { width: 100%; max-width: 400px; }
+        
+        select { 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 8px; 
+            background: #1e1e1e; 
+            color: #fff;
+            border: 1px solid #333;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        audio { width: 100%; margin-top: 10px; filter: invert(90%) hue-rotate(180deg); }
+        
+        #status { 
+            margin-top: 15px; 
+            font-size: 14px; 
+            padding: 8px;
+            border-radius: 5px;
+            background: #252525;
+        }
+        
+        .online { color: #4caf50; }
+        .offline { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ELECTRON Radio</h1>
+        
+        <select id="stationSelector">
+            <option value="http://live.rockmelodic-radio.com:8124/stream/1/">Rock Melodic Radio</option>
+            <option value="http://hd.lagrosseradio.info:8000/lagrosseradio-reggae-024.mp3">La Grosse Radio Reggae</option>
+        </select>
+
+        <audio id="radio" controls autoplay></audio>
+
+        <div id="status">Status: <span id="statusText" class="online">Loading...</span></div>
+        <p style="font-size: 11px; margin-top: 20px; color: #666;">Electron Radio v1.0</p>
+    </div>
+
+    <script>
+        const audio = document.getElementById('radio');
+        const selector = document.getElementById('stationSelector');
+        const statusText = document.getElementById('statusText');
+
+        // Initial settings
+        audio.volume = 0.3;
+        audio.src = selector.value;
+
+        // Status monitoring
+        audio.onplaying = () => {
+            statusText.innerText = "Playing (Live)";
+            statusText.className = "online";
+        };
+
+        audio.onerror = () => {
+            statusText.innerText = "Offline / Connection Error";
+            statusText.className = "offline";
+        };
+
+        // Station change logic
+        selector.addEventListener('change', (event) => {
+            statusText.innerText = "Loading...";
+            audio.src = event.target.value;
+            audio.play().catch(e => console.log("Waiting for user interaction..."));
+        });
+    </script>
+</body>
+</html>
